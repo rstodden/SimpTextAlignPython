@@ -1,6 +1,5 @@
 # CATS: A Tool for Customised Alignment of Text Simplification Corpora in Python
-
-The java version avaiable at https://github.com/neosyon/SimpTextAlign
+The java version available at https://github.com/neosyon/SimpTextAlign
 ```
 @inproceedings{StajnerACL17,
   author    = {Sanja Stajner and
