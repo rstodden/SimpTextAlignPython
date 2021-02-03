@@ -1,0 +1,11 @@
+EnglishLanguage = "en"
+SpanishLanguage = "es"
+ParagraphSepEmptyLineLevel = "paragraphSeparatedByEmptyLine"
+SentenceLevel = "sentence"
+ParagraphSepEmptyLineAndSentenceLevel = "sentenceWithParagraphSeparatedByEmptyLinePreAlignment"
+WAVGstrategy = "WAVG"
+CWASAstrategy = "CWASA"
+CNGstrategy = "CNG"
+closestSimStrategy = "closestSimStrategy"
+closestSimKeepingSeqStrategy = "closestSimKeepingSequenceStrategy"
+ABBREVIATIONS = ["Dr." , "Prof." , "Mr." , "Mrs." , "Ms." , "Jr." , "Ph.D."]
