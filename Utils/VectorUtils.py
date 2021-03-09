@@ -12,12 +12,20 @@ def calculateWAVGs(cleanSubtexts,  em):
 
 def getCosDistPartialResultVector(v):
     a = 0.0
-    for key in v:
-        a += pow(v[key], 2)
-    if a > 0:
-        a = math.sqrt(a)
+    if isinstance(v, dict):
         for key in v:
-            v[key]= v[key] / a
+            a+=pow(v[key], 2)
+        if a > 0:
+            a = math.sqrt(a)
+            for key in v:
+                v[key] = v[key] / a
+    else:
+        for key in range(len(v)):
+            a += pow(v[key], 2)
+        if a > 0:
+            a = math.sqrt(a)
+            for key in range(len(v)):
+                v[key]= v[key] / a
 
 
 def alignUsingStrategy(cleanSubtexts1, cleanSubtexts2,  similarityStrategy,  alignmentStrategy,  model):
@@ -42,6 +50,10 @@ def alignUsingStrategy(cleanSubtexts1, cleanSubtexts2,  similarityStrategy,  ali
     return alignments
 
 
+
+
+
+
 def alignUsingNgrams( subtexts1, subtexts2):
     sims = numpy.zeros((len(subtexts1), len(subtexts2)))
     i = 0
@@ -58,10 +70,16 @@ def alignUsingNgrams( subtexts1, subtexts2):
 
 def getCosSimUsingPartialResults( v1, v2):
     sim = 0.0
-    for key in v1:
-        if key in v2:
-            v2w = v2[key]
-            sim += v1[key]*v2w                
+    if isinstance(v1, dict):
+        for key in v1:
+            if key in v2:
+                v2w = v2[key]
+                sim+= v1[key]*v2w
+    else:
+        for key in range(len(v1)):
+            if key in range(len(v2)):
+                v2w = v2[key]
+                sim += v1[key]*v2w                
     return sim
 
 
