@@ -34,6 +34,7 @@ def start():
     parser.add_argument('-t', required=False, help='aSt')
     parser.add_argument('-u', required=False, help='aSt2')
     parser.add_argument('-e', required=False, help='emb')
+    parser.add_argument('-ll', required=False, help='linelevel')
 
     args = parser.parse_args()
     param2value = MyIOutils.parseOptions(args)
@@ -48,6 +49,8 @@ def start():
     outFile = param2value.get("output")
     similarityStrategy = param2value.get("similarity")
     embeddingsFile = param2value.get("emb")
+        # linelevel - extra property for handling sentence segmentation per line (to be able to compare with other tools)
+    lineLevel = param2value.get("linelevel") 
     if len(similarityStrategy) == 3 and similarityStrategy[0]=='C' and similarityStrategy[-1]=='G':
         nGramSize = int(similarityStrategy[1])
         similarityStrategy = DefinedConstants.CNGstrategy
@@ -78,7 +81,7 @@ def start():
 
 
 def calculateTwoTextPerLineFileSimilarities( inFile,  outFile,  similarityStrategy, 
-			 alignmentStrategy,  alignmentLevel,  model,  firstSentIndex,  secondSentIndex):
+			 alignmentStrategy,  alignmentLevel,  model,  firstSentIndex,  secondSentIndex, lineLevel):
     inF = open(inFile, "r")
     outF = open(outFile, "w")
     for line in inF.readlines():

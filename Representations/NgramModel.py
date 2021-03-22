@@ -41,7 +41,7 @@ class NgramModel(object):
         self.calculateIDF()
 
 
-    def buildTwoTextPerLineFileModel(self, inFile, alignmentLevel, fistSentIndex, secondSentIndex):
+    def buildTwoTextPerLineFileModel(self, inFile, alignmentLevel, fistSentIndex, secondSentIndex, lineLevel):
         """ generated source for method buildTwoTextPerLineFileModel """
         with open(inFile, "r") as f:
             for l in f.readlines():
@@ -49,8 +49,8 @@ class NgramModel(object):
                     continue
                 if l:
                     ar = l.split("\t")
-                    self.processAndCountTextNgrams(ar[fistSentIndex], alignmentLevel)
-                    self.processAndCountTextNgrams(ar[secondSentIndex], alignmentLevel)
+                    self.processAndCountTextNgrams(ar[fistSentIndex], alignmentLevel, lineLevel)
+                    self.processAndCountTextNgrams(ar[secondSentIndex], alignmentLevel, lineLevel)
         self.calculateIDF()
 
     def processAndCountTextNgrams(self, text, alignmentLevel, lineLevel):
