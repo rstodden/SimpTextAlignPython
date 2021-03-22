@@ -71,10 +71,10 @@ def start():
         print("Calculating IDF...")
         aux = NgramModel(True, nGramSize)
         model = ModelContainer(None, aux)
-        aux.buildTwoTextPerLineFileModel(inFile, alignmentLevel, firstSentIndex, secondSentIndex)
+        aux.buildTwoTextPerLineFileModel(inFile, alignmentLevel, firstSentIndex, secondSentIndex, lineLevel)
     print("Aligning...")
     ini = time.time()
-    calculateTwoTextPerLineFileSimilarities(inFile,outFile, similarityStrategy, alignmentStrategy, alignmentLevel, model, firstSentIndex, secondSentIndex)
+    calculateTwoTextPerLineFileSimilarities(inFile,outFile, similarityStrategy, alignmentStrategy, alignmentLevel, model, firstSentIndex, secondSentIndex, lineLevel)
     end = time.time()
     diff = end - ini
     print("Total processing time: %d min %f sec" % (int(diff / 60), diff % 60))
