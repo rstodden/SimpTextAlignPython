@@ -111,6 +111,7 @@ def parseOptions(args):
     convertArgToOption(param2value, args.t, "aSt")
     convertArgToOption(param2value, args.u, "aSt2")
     convertArgToOption(param2value, args.e, "emb")
+    convertArgToOption(param2value, args.ll, "linelevel")    
     return param2value
 
 def showNewselaUsageMessage():

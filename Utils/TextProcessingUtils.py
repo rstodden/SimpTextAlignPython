@@ -17,24 +17,29 @@ def getCleanEmbeddingModelTokens( text):
     return cleanTokens
 
 
-def getCleanText( text,  alignmentStrategy, similarityStrategy,  model):
-    subtexts = getSubtexts(text,alignmentStrategy)
+def getCleanText( text,  alignmentStrategy, similarityStrategy,  model, lineLevel):
+    subtexts = getSubtexts(text,alignmentStrategy, lineLevel)
     cleanSubtexts_ = cleanSubtexts(subtexts, similarityStrategy, model)
     if similarityStrategy == DefinedConstants.WAVGstrategy:
         VectorUtils.calculateWAVGs(cleanSubtexts_,model.em)		
     if alignmentStrategy == DefinedConstants.ParagraphSepEmptyLineAndSentenceLevel:
-        getCleanSublevelText(cleanSubtexts_, DefinedConstants.SentenceLevel, similarityStrategy, model)
+        getCleanSublevelText(cleanSubtexts_, DefinedConstants.SentenceLevel, similarityStrategy, model, lineLevel)
     return cleanSubtexts_
 	
 def getCleanSublevelText(cleanSubtexts,  alignmentStrategy,
-			 similarityStrategy,  model):
+			 similarityStrategy,  model, lineLevel):
 	for cleanText in  cleanSubtexts:
-		cleanText.setSubLevelRepresentations(getCleanText(cleanText.getText(), alignmentStrategy, similarityStrategy, model))
+		cleanText.setSubLevelRepresentations(getCleanText(cleanText.getText(), alignmentStrategy, similarityStrategy, model, lineLevel))
 
-def getSubtexts( text,  alignemntStrategy):
+def getSubtexts( text,  alignemntStrategy, lineLevel):
     subtexts = []
     if alignemntStrategy == DefinedConstants.ParagraphSepEmptyLineLevel or alignemntStrategy == DefinedConstants.ParagraphSepEmptyLineAndSentenceLevel:
         ar = re.split(r'\n\n', text)
+        for subtext in ar:
+            if len(subtext.strip())>0:
+                subtexts.append(subtext)
+    elif lineLevel == DefinedConstants.LineLevel:
+        ar = re.split(r'\n', text)
         for subtext in ar:
             if len(subtext.strip())>0:
                 subtexts.append(subtext)

@@ -86,8 +86,8 @@ def calculateTwoTextPerLineFileSimilarities( inFile,  outFile,  similarityStrate
             continue
         if line:
             ar = line.strip().split("\t")
-            cleanSubtexts1 = TextProcessingUtils.getCleanText(ar[firstSentIndex],alignmentLevel, similarityStrategy,model)
-            cleanSubtexts2 = TextProcessingUtils.getCleanText(ar[secondSentIndex],alignmentLevel, similarityStrategy,model)
+            cleanSubtexts1 = TextProcessingUtils.getCleanText(ar[firstSentIndex],alignmentLevel, similarityStrategy,model, lineLevel)
+            cleanSubtexts2 = TextProcessingUtils.getCleanText(ar[secondSentIndex],alignmentLevel, similarityStrategy,model, lineLevel)
             alignments = VectorUtils.alignUsingStrategy(cleanSubtexts1, cleanSubtexts2,similarityStrategy, alignmentStrategy, model)
             if len(ar) == 3 or len(ar) == 4: # this is only for the WikiSimpleWiki dataset     
                 outF.write(ar[0] +"\t"+ar[firstSentIndex]+"\t"+ar[secondSentIndex]+"\t"+str(alignments[0].getSimilarity())+"\n")

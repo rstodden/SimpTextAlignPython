@@ -36,6 +36,7 @@ def start():
     parser.add_argument('-t', required=False, help='aSt')
     parser.add_argument('-u', required=False, help='aSt2')
     parser.add_argument('-e', required=False, help='emb')
+    parser.add_argument('-ll', required=False, help='linelevel')
 
     args = parser.parse_args()
     param2value = MyIOutils.parseOptions(args)
@@ -48,6 +49,8 @@ def start():
     outFile = param2value.get("output")
     similarityStrategy = param2value.get("similarity")
     embeddingsFile = param2value.get("emb")
+    # linelevel - extra property for handling sentence segmentation per line (to be able to compare with other tools)
+    lineLevel = param2value.get("linelevel") 
     if len(similarityStrategy) == 3 and similarityStrategy[0]=='C' and similarityStrategy[-1]=='G':
         nGramSize = int(similarityStrategy[1])
         similarityStrategy = DefinedConstants.CNGstrategy
@@ -68,16 +71,16 @@ def start():
         print("Calculating IDF...")
         aux = NgramModel(True, nGramSize)
         model = ModelContainer(None, aux)
-        aux.buildNewselaNgramModel(inFile, language, alignmentLevel)
+        aux.buildNewselaNgramModel(inFile, language, alignmentLevel, lineLevel)
     print("Aligning...")
     ini = time.time()
-    alignNewselaDataset(inFile, language, outFile, alignmentLevel, similarityStrategy, alignmentStrategy, subLvAlignmentStrategy, model)
+    alignNewselaDataset(inFile, language, outFile, alignmentLevel, similarityStrategy, alignmentStrategy, subLvAlignmentStrategy, model, lineLevel)
     end = time.time()
     diff = end - ini
     print("Total processing time: %d min %f sec" % (int(diff / 60), diff % 60))
 
 
-def alignNewselaDataset( inFolder, language, outFolder, alignmentLevel, similarityStrategy, alignmentStrategy, subLvAlignmentStrategy, model):
+def alignNewselaDataset( inFolder, language, outFolder, alignmentLevel, similarityStrategy, alignmentStrategy, subLvAlignmentStrategy, model, lineLevel):
 
     regFilter = r'^.*\.'+language+'.0.txt$'
     k =0 
@@ -89,7 +92,7 @@ def alignNewselaDataset( inFolder, language, outFolder, alignmentLevel, similari
                     file1 = fileProto.replace("." + language + ".0.txt","." + language + "." + str(i) + ".txt")
                     text1 = MyIOutils.readTextFile(inFolder + file1)
                     if text1:
-                        file2clean[file1] = TextProcessingUtils.getCleanText(text1, alignmentLevel, similarityStrategy, model)
+                        file2clean[file1] = TextProcessingUtils.getCleanText(text1, alignmentLevel, similarityStrategy, model, lineLevel)
                 
                 cleanSubtexts1 = []
                 cleanSubtexts2 = []

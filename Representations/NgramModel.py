@@ -21,14 +21,14 @@ class NgramModel(object):
         
 
 
-    def buildNewselaNgramModel(self, inFolder, language, alignmentLevel):
+    def buildNewselaNgramModel(self, inFolder, language, alignmentLevel, lineLevel):
         """ generated source for method buildNewselaNgramModel """
         regFilter = r'^.*\.'+language+'.0.txt$'
         for dirpath, dirs, files in os.walk(inFolder):  
             for filename in files:
                 if re.match(regFilter, filename):
                     text = MyIOutils.readTextFile(inFolder + filename)
-                    self.processAndCountTextNgrams(text, alignmentLevel)
+                    self.processAndCountTextNgrams(text, alignmentLevel, lineLevel)
                     # CARE, THIS LOOP IS DEPENDENT OF THE NEWSELA DATASET FORMAT
                     i = 1 
                     while i<5:
@@ -36,7 +36,7 @@ class NgramModel(object):
                         file_ = re.sub("." + language + ".0.txt","." + language + "." + str(i) + ".txt", filename)
                         text = MyIOutils.readTextFile(inFolder + file_)
                         if text != None:
-                            self.processAndCountTextNgrams(text, alignmentLevel)
+                            self.processAndCountTextNgrams(text, alignmentLevel, lineLevel)
                         i += 1
         self.calculateIDF()
 
@@ -53,17 +53,17 @@ class NgramModel(object):
                     self.processAndCountTextNgrams(ar[secondSentIndex], alignmentLevel)
         self.calculateIDF()
 
-    def processAndCountTextNgrams(self, text, alignmentLevel):
+    def processAndCountTextNgrams(self, text, alignmentLevel, lineLevel):
         """ generated source for method processAndCountTextNgrams """
         subtexts = []
         if not alignmentLevel == DefinedConstants.ParagraphSepEmptyLineAndSentenceLevel:
-            subtexts = TextProcessingUtils.getSubtexts(text, alignmentLevel)
+            subtexts = TextProcessingUtils.getSubtexts(text, alignmentLevel, lineLevel)
         else:
             # if it is done at sentence and paragraph level, since this is to calculate the IDF, we can concatenate both levels. This is done because the sentence splitter may introduce some new ngrams, as a result of the tokenization
             subtexts = []
-            subtexts1 = TextProcessingUtils.getSubtexts(text, DefinedConstants.ParagraphSepEmptyLineAndSentenceLevel)
+            subtexts1 = TextProcessingUtils.getSubtexts(text, DefinedConstants.ParagraphSepEmptyLineAndSentenceLevel, lineLevel)
             for subtext1 in subtexts1:
-                subtexts2 = TextProcessingUtils.getSubtexts(text, DefinedConstants.SentenceLevel)
+                subtexts2 = TextProcessingUtils.getSubtexts(text, DefinedConstants.SentenceLevel, lineLevel)
                 builder = ""
                 for subtext2 in subtexts2:
                     builder += subtext2 + " "
