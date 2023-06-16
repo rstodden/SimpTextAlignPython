@@ -3,7 +3,7 @@ import time
 
 from Utils import MyIOutils, DefinedConstants, TextProcessingUtils, VectorUtils
 from Representations import ModelContainer, NgramModel, EmbeddingModel
-
+import DatasetAlignment.AlignAnyDataset
 
 baseDir = "/path/to/your/dataset/parent/folder/"
 inFile = baseDir+"SimplifiedTextAlignment/WikiSimpleWiki/annotations.txt"
@@ -19,14 +19,17 @@ similarityStrategy = DefinedConstants.CNGstrategy
 alignmentStrategy = DefinedConstants.closestSimStrategy
 outFile = MyIOutils.getOutputFileName(inFile, alignmentLevel, similarityStrategy, nGramSize)
 
-embeddingsFile = baseDir+"w2v_collections/Wikipedia/vectors/EN_Wikipedia_w2v_input_format.txtUTF8.vec"
+# embeddingsFile = baseDir+"w2v_collections/Wikipedia/vectors/EN_Wikipedia_w2v_input_format.txtUTF8.vec"
+embeddingsFile = "data/de-word2vec/cc.de.300.vec"
 
 
 
 def start():
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('-i', required=True, help='input')
+    parser.add_argument('-ic', required=False, help='input_complex')
+    parser.add_argument('-it', required=False, help='input_target')
+    parser.add_argument('-i', required=False, help='input')
     parser.add_argument('-o', required=True, help='output')
     parser.add_argument('-l', required=True, help='language')
     parser.add_argument('-s', required=True, help='similarity')
@@ -38,6 +41,8 @@ def start():
 
     args = parser.parse_args()
     param2value = MyIOutils.parseOptions(args)
+    # setting, outFolder, globalSimilarityStrategy, similarityStrategy, language, embeddingsFile, lineLevel, alignmentStrategy, alignmentLevel, subLvAlignmentStrategy, model, nGramSize = DatasetAlignment.AlignAnyDataset.get_settings(
+    #    param2value)
     nGramSize = 0
     firstSentIndex = 0
     secondSentIndex = 1         
@@ -45,10 +50,13 @@ def start():
         print("Error: invalid input options. ")
         print(MyIOutils.showCustomModelUsageMessage())
         exit()         
+    # inFileComplex = param2value.get("input_complex")
+    # inFileSimple = param2value.get("input_target")
     inFile = param2value.get("input")
     outFile = param2value.get("output")
     similarityStrategy = param2value.get("similarity")
     embeddingsFile = param2value.get("emb")
+    language = param2value.get("language")
         # linelevel - extra property for handling sentence segmentation per line (to be able to compare with other tools)
     lineLevel = param2value.get("linelevel") 
     if len(similarityStrategy) == 3 and similarityStrategy[0]=='C' and similarityStrategy[-1]=='G':

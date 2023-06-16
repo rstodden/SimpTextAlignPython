@@ -45,7 +45,7 @@ def readTextFile(inFile):
                 continue
             if i:
                 out.append(i+'\n')
-    return ''.join(out) 
+    return ''.join(out)
 
 def saveAlignments(alingments, outFile, fileEncoding="utf-8"):
     if len(alingments)>0:
@@ -58,7 +58,7 @@ def saveAlignments(alingments, outFile, fileEncoding="utf-8"):
 def readNewselaEmbeddingVocabulary(inFolder, language):
     vocab = set()
     regFilter = r'^.*\.'+language+'.0.txt$'
-    for dirpath, dirs, files in os.walk(inFolder):  
+    for dirpath, dirs, files in os.walk(inFolder):
         for filename in files:
             if re.match(regFilter, filename):
                 fname = os.path.join(dirpath,filename)
@@ -77,7 +77,7 @@ def readNewselaEmbeddingVocabulary(inFolder, language):
 def displayAlignments(alignments,  detailed=True):
     print ("Alignments:")
     for alignment in alignments:
-        if detailed: 
+        if detailed:
             print(alignment.toString())
         else:
             print(alignment.getIndexAlignmentString())
@@ -96,14 +96,17 @@ def readTwoTextPerLineFileEmbeddingVocabulary(inFile, fistSentIndex, secondSentI
                 vocab.update(TextProcessingUtils.getCleanEmbeddingModelTokens(ar[fistSentIndex]))
                 vocab.update(TextProcessingUtils.getCleanEmbeddingModelTokens(ar[secondSentIndex]))
     return vocab
-	
+
 def convertArgToOption(param2value, args, key):
     if args:
         param2value[key] = args
 
 def parseOptions(args):
     param2value = {}
+    convertArgToOption(param2value, args.i, "inputdir")
     convertArgToOption(param2value, args.i, "input")
+    convertArgToOption(param2value, args.ic, "input_complex")
+    convertArgToOption(param2value, args.it, "input_target")
     convertArgToOption(param2value, args.o, "output")
     convertArgToOption(param2value, args.l, "language")
     convertArgToOption(param2value, args.s, "similarity")
@@ -111,21 +114,21 @@ def parseOptions(args):
     convertArgToOption(param2value, args.t, "aSt")
     convertArgToOption(param2value, args.u, "aSt2")
     convertArgToOption(param2value, args.e, "emb")
-    convertArgToOption(param2value, args.ll, "linelevel")    
+    convertArgToOption(param2value, args.ll, "linelevel")
     return param2value
 
 def showNewselaUsageMessage():
     print("Usage:\nprogram -i inFolder -o outFolder  -l language -s similarityStrategy -a alignmentLevel -t alignmentStrategy"
             + " {-u SubLevelalignmentStrategy} {-e embeddingsTxtFile}\n"
-            + "\"inFolder\" is the folder with the original newsela texts.\n"	
-            + "\"outFolder\" is the folder where the alignments will be stored.\n"	
-            + "\"language\" can be \""+DefinedConstants.SpanishLanguage+"\" or \""+DefinedConstants.EnglishLanguage+"\". Default: \""+DefinedConstants.EnglishLanguage+"\".\n"	
-            + "\"similarityStrategy\" can be \""+DefinedConstants.CNGstrategy+"\", \""+DefinedConstants.WAVGstrategy+"\", or \""+DefinedConstants.CWASAstrategy+"\", where the N in \""+DefinedConstants.CNGstrategy+"\" should be replaced for the desired n-gram size, e.g. \""+DefinedConstants.CNGstrategy.replace("N", 3+"")+"\". Default: \""+DefinedConstants.CNGstrategy.replace("N", 3+"")+"\".\n"	
+            + "\"inFolder\" is the folder with the original newsela texts.\n"
+            + "\"outFolder\" is the folder where the alignments will be stored.\n"
+            + "\"language\" can be \""+DefinedConstants.SpanishLanguage+"\" or \""+DefinedConstants.EnglishLanguage+"\". Default: \""+DefinedConstants.EnglishLanguage+"\".\n"
+            + "\"similarityStrategy\" can be \""+DefinedConstants.CNGstrategy+"\", \""+DefinedConstants.WAVGstrategy+"\", or \""+DefinedConstants.CWASAstrategy+"\", where the N in \""+DefinedConstants.CNGstrategy+"\" should be replaced for the desired n-gram size, e.g. \""+DefinedConstants.CNGstrategy.replace("N", 3+"")+"\". Default: \""+DefinedConstants.CNGstrategy.replace("N", 3+"")+"\".\n"
             + "\"alignmentLevel\" can be \""+DefinedConstants.ParagraphSepEmptyLineLevel+"\", \""+DefinedConstants.SentenceLevel+"\", or \""+DefinedConstants.ParagraphSepEmptyLineAndSentenceLevel+"\". Default: \""+DefinedConstants.SentenceLevel+"\".\n"
             + "\"alignmentStrategy\" can be \""+DefinedConstants.closestSimStrategy+"\" or \""+DefinedConstants.closestSimKeepingSeqStrategy+"\". Default: \""+DefinedConstants.closestSimStrategy+"\".\n"
             + "\"SubLevelalignmentStrategy\" can be \""+DefinedConstants.closestSimStrategy+"\" or \""+DefinedConstants.closestSimKeepingSeqStrategy+"\". Default: \""+DefinedConstants.closestSimStrategy+"\".\n"
-            + "\"embeddingsTxtFile\" is the file with the embeddings using the classical word2vec txt format.\n"	
-            )		
+            + "\"embeddingsTxtFile\" is the file with the embeddings using the classical word2vec txt format.\n"
+            )
 
 
 def showCustomModelUsageMessage():
@@ -133,8 +136,8 @@ def showCustomModelUsageMessage():
              "\"inFile\" is a file with two tab-separated texts per line. The program will output a similarity score for each one of these text pairs.\n"	
              "\"outFile\" contains the original \"inFile\" tab-separated texts plus their similarity score.\n"	
              "\"similarityStrategy\" can be \""+DefinedConstants.CNGstrategy+"\", \""+DefinedConstants.WAVGstrategy+"\", or \""+DefinedConstants.CWASAstrategy+"\", where the N in \""+DefinedConstants.CNGstrategy+"\" should be replaced for the desired n-gram size, e.g. \""+DefinedConstants.CNGstrategy.replace("N", str(3)+"")+"\". Default: \""+DefinedConstants.CNGstrategy.replace("N", str(3)+"")+"\".\n"	
-             "\"embeddingsTxtFile\" is the file with the embeddings using the classical word2vec txt format.\n"	
-            )		
+             "\"embeddingsTxtFile\" is the file with the embeddings using the classical word2vec txt format.\n"
+            )
 
 def getOutputFileName(inFile, alignmentLevel, similarityStrategy, nGramSize):
     simStr = similarityStrategy
@@ -192,4 +195,3 @@ def calcHistogram(data, min,  max, numBins):
             bin = numBins -1
         result[int(bin)] += 1
     return result
-	

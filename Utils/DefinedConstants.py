@@ -1,5 +1,6 @@
 EnglishLanguage = "en"
 SpanishLanguage = "es"
+GermanLanguage = "de"
 ParagraphSepEmptyLineLevel = "paragraphSeparatedByEmptyLine"
 SentenceLevel = "sentence"
 LineLevel = "line"

@@ -14,14 +14,16 @@ class EmbeddingModel(object):
 
         self.i2v = []
         self.w2i = {}
-        with open(embeddingsFile, "r") as f:
+        with open(embeddingsFile, "r", encoding="utf-8") as f:
             next(f)
             for l in f.readlines():
+                # print(l)
                 if not l.strip():
                     continue
                 if l:
                     ar = l.split(" ")
                     v = []
+                    # print(ar[0].encode("utf-8"))
                     if ar[0] in vocab:
                         for i in range(1, len(ar)):
                             v.append(float(ar[i]))

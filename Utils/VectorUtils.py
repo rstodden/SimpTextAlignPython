@@ -147,13 +147,15 @@ def alignUsingWAVG(subtexts1, subtexts2):
 
 
 def getAlignmentsUsingClosestCosSim(cleanSubtexts1, cleanSubtexts2, sims):
-		alignments = []		
-		i = 0
-		for subtext2 in cleanSubtexts2:
-			closestIndex = getIndexOfClosestSample(sims,i)
-			alignments.append(TextAlignment(subtext2.getText(), cleanSubtexts1[closestIndex].getText(),sims[closestIndex][i], i, closestIndex))
-			i+=1
-		return alignments
+        alignments = []
+        i = 0
+        for subtext2 in cleanSubtexts2:
+            closestIndex = getIndexOfClosestSample(sims,i)
+            # alignments.append(TextAlignment(subtext2.getText(), cleanSubtexts1[closestIndex].getText(),sims[closestIndex][i], i, closestIndex))
+            # todo merge n:1 alignment here
+            alignments.append(TextAlignment(cleanSubtexts1[closestIndex].getText(), subtext2.getText(), sims[closestIndex][i],  closestIndex, i))
+            i+=1
+        return alignments
 
 
 def getIndexOfClosestSample( sims,  i):
@@ -173,23 +175,33 @@ def getAlignmentsUsingClosestCosSimKeepingSeq(cleanSubtexts1, cleanSubtexts2, si
     for i in range(len( alignments)):
         alignment2fix = alignments[i]
         if not i in validIndexes:
-            nextValid = cleanSubtexts1.size()-1
-            for  j in range( len(alignments)):
+            nextValid = len(cleanSubtexts1)-1
+            # for  j in range(i+1, len(alignments)-1):
+            for j in range(i + 1, len(alignments)):
                 if j in validIndexes:
                     nextValid = alignments[j].getTargetIndex()
+                    # nextValid = alignments[j].getSourceIndex()
                     break
+            # print("len(sims), prevValid", len(sims), prevValid)
+            # print("len(sims[prevValid]), alignment2fix.getSourceIndex()", len(sims[prevValid]), alignment2fix.getSourceIndex())
+            # print("len(sims[prevValid]), alignment2fix.getSourceIndex()", len(sims[prevValid]), alignment2fix.getTargetIndex())
+            # bestSim = sims[prevValid][alignment2fix.getTargetIndex()]
             bestSim = sims[prevValid][alignment2fix.getSourceIndex()]
             bestIndex = prevValid
-            for j  in range(prevValid+1, nextValid):
+            for j in range(prevValid + 1, nextValid):
                 if sims[j][alignment2fix.getSourceIndex()] > bestSim:
+                    # if sims[j][alignment2fix.getTargetIndex()] > bestSim:
                     bestSim = sims[j][alignment2fix.getSourceIndex()]
+                    # bestSim = sims[j][alignment2fix.getTargetIndex()]
                     bestIndex = j
-            alignment2fix.setTarget(cleanSubtexts1.get(bestIndex).getText(), bestIndex, bestSim)
+            alignment2fix.setTarget(cleanSubtexts1[bestIndex].getText(), bestIndex, bestSim)
+            # alignment2fix.setTarget(cleanSubtexts2[bestIndex].getText(), bestIndex, bestSim)
         prevValid = alignment2fix.getTargetIndex()
-    return alignments
+        # prevValid = alignment2fix.getSourceIndex()
+        return alignments
 
 def getLongestIncreassingTargetSequenceIndexes(alignments):
-    lengthLongestIncreassing = []
+    lengthLongestIncreassing = dict()
     globalMax = -1 
     globalMaxIndex = -1
     for i in range(len(alignments)):

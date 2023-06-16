@@ -40,7 +40,7 @@ class TextAlignment(object):
 
     def __str__(self):
         """ generated source for method toString """
-        return self.index1 + ":\t" + self.source + "\t---(" + self.similarity + ")--->\t" + self.index2 + ":\t" + self.target
+        return str(self.index1) + ":\t" + self.source + "\t---(" + str(self.similarity) + ")--->\t" + str(self.index2) + ":\t" + self.target
 
     def getSource(self):
         """ generated source for method getSource """

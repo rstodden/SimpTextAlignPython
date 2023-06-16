@@ -48,6 +48,7 @@ def start():
     inFile = param2value.get("input")
     outFile = param2value.get("output")
     similarityStrategy = param2value.get("similarity")
+    language = param2value.get("language")
     embeddingsFile = param2value.get("emb")
     # linelevel - extra property for handling sentence segmentation per line (to be able to compare with other tools)
     lineLevel = param2value.get("linelevel") 
