@@ -10,10 +10,15 @@ For the German adaptation, please download German word embeddings and store them
 main.py -i inFolder -o outFolder  -l language -s similarityStrategy -a alignmentLevel -t alignmentStrategy {-u SubLevelalignmentStrategy} {-e embeddingsTxtFile}
 ```
 
+See also [example/deplain.py](./example/deplain.py) for example code to align the DEplain corpus.
+
+
 ## Contributions / Changes
-- see data/deplain for example files
+- to reproduce the results reported in our paper, please copy the [DEplain data](https://github.com/rstodden/DEPlain/tree/main/C__Alignment_Algorithms/documents) to [data/deplain/](./data/deplain)
+- see [example/deplain.py](./example/deplain.py) for example code to align the DEplain corpus
 - see DatasetAlignment/AlignAnyDataset.py for alignment of datasets with only one simplification (no references)
 - bugfixes for alignment with embeddings. For our experiments we used German [FastText embeddings](https://fasttext.cc/docs/en/crawl-vectors.html) with 300 dimensions. 
+
 
 ## Problems
 - some issue with target and source. Therefore, in AlignAnyDataset the target and source file are reversed. If it is not reversed the content of simple is saved in complex and vice versa. But then it is n:1 alignment and not 1:n as proposed in the CATS paper.
@@ -21,7 +26,9 @@ main.py -i inFolder -o outFolder  -l language -s similarityStrategy -a alignment
 
 
 ## Citation
-### Paper in which we use the adaptation of CATS
+If you use this code, please cite the original CATS paper and our DEplain paper.
+
+**Our Paper:**
 ```
 @inproceedings{stodden-etal-2023-deplain,
     title = "{DE}-plain: A German Parallel Corpus with Intralingual Translations into Plain Language for Sentence and Document Simplification",
@@ -37,7 +44,7 @@ main.py -i inFolder -o outFolder  -l language -s similarityStrategy -a alignment
 
 ```
 
-### Original Paper
+**Original Paper**
 The original code (in JAVA) is available at https://github.com/neosyon/SimpTextAlign.
 ```
 @inproceedings{StajnerACL17,
